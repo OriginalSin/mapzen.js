@@ -193,7 +193,7 @@ var Geocoder = L.Control.extend({
     return params;
   },
 
-  search: function (input) {
+  searchWithUI: function (input) {
     // Prevent lack of input from sending a malformed query to Pelias
     if (!input) return;
 
@@ -213,7 +213,7 @@ var Geocoder = L.Control.extend({
     var params = {
       text: input
     };
-
+    console.log(params);
     this.callPelias(url, params, 'autocomplete');
   }, API_RATE_LIMIT),
 
@@ -724,7 +724,7 @@ var Geocoder = L.Control.extend({
             } else {
               // perform a full text search on enter
               var text = (e.target || e.srcElement).value;
-              this.search(text);
+              this.searchWithUI(text);
             }
             L.DomEvent.preventDefault(e);
             break;
@@ -925,6 +925,14 @@ var Geocoder = L.Control.extend({
       }
     }
     previousWidth = width;
+  },
+
+  search: function (input, callback) {
+    var param = {
+      text: input
+    };
+    var params = this.getParams(param);
+    AJAX.request(this.options.url + '/search', params, callback);
   }
 });
 
@@ -1064,6 +1072,7 @@ var AJAX = {
     return xdr;
   },
   request: function (url, params, callback, context) {
+    console.log(params);
     var paramString = this.serialize(params);
     var httpRequest = this.http_request(callback, context);
 

@@ -47,6 +47,12 @@
       var geocoder = L.Mapzen.geocoder('search--NA8UXg');
       geocoder.addTo(map);
 
+      var searchTestFunction = function (err, result) {
+        console.log(result);
+      }
+
+      geocoder.search('tisch school of the arts', testFunction);
+
       // allows for a URL hash to be created
       L.Mapzen.hash({
         map: map,
